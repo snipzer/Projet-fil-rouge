@@ -40,17 +40,29 @@ create table genre(
 drop table if exists critique;
 create table critique(
   idCritique int not null auto_increment primary key,
-  compteurAime int not null,
-  compteurAimePas int not null,
   note float not null,
   critique text not null,
-  ratioAime_AimePas float,
+  boolModerationOk bool not null,
   idUtilisateur int not null,
   idSerie int not null,
   constraint LiaisonCritiqueUtilisateur foreign key(idUtilisateur) references utilisateur(idUtilisateur),
   constraint LiaisonCritiqueSerie foreign key(idSerie) references serie(idSerie),
   constraint NoteCompriseEntreZeroEtDix check (note >= 0 and note <= 10)
 );
+
+drop table if exists likeCritique;
+create table likeCritique(
+  idLikeCritique int not null auto_increment primary key,
+  compteurAime int not null,
+  compteurAimePas int not null,
+  ratioAime_AimePas float,
+  idUtilisateur int not null,
+  idCritique int not null,
+  constraint LiaisonLikeCritiqueOnCritique foreign key(idCritique) references critique(idCritique),
+  constraint LiaisonLikeCritiqueOnUtilisateur foreign key(idUtilisateur) references utilisateur(idUtilisateur)
+);
+
+
 
 drop table if exists favoris;
 create table favoris(
