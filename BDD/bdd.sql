@@ -10,7 +10,6 @@ use bddV2;
     userName varchar(25) not null,
     password varchar(50) not null,
     mail varchar(50) not null,
-    phone varchar(12) not null,
     birthdate date not null,
     profilePicture varchar(100) not null,
     criticNumber int not null,

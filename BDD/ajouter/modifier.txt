@@ -1,2 +1,3 @@
--Date pour les critiques poster
--Titre pour une critique
+Recherche de série par épisode ? 
+	-nombre d'épisode
+	-un épisode précis
