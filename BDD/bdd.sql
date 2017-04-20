@@ -47,6 +47,8 @@ use bddV2;
     content text not null,
     likeNumber int not null,
     dislikeNumber int not null,
+    title varchar(25) not null,
+    postedThe date not null,
     isValid bool not null,
     idUser int not null,
     idSerie int not null,
