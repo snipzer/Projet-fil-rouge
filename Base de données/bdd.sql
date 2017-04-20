@@ -1,120 +1,121 @@
-create database if not exists bddV2;
+drop database bddV2;
+create database bddV2;
 use bddV2;
 
-drop table if exists utilisateur;
-create table utilisateur(
-  idUtilisateur int not null auto_increment primary key,
-  nomUtilisateur varchar(25) not null,
-  prenomUtilisateur varchar(25) not null,
-  motDePasseUtilisateur varchar(50) not null,
-  mailUtilisateur varchar(50) not null,
-  telephoneUtilisateur varchar(12) not null,
-  dateNaissance date not null,
-  photoUtilisateur varchar(100) not null,
-  nombreCritique int not null,
-  boolEstModerateur bool not null,
-  boolEstAdministrateur bool not null
-);
+  drop table if exists user;
+  create table user(
+    idUser int not null auto_increment primary key,
+    lastName varchar(25) not null,
+    firstName varchar(25) not null,
+    userName varchar(25) not null,
+    password varchar(50) not null,
+    mail varchar(50) not null,
+    phone varchar(12) not null,
+    birthdate date not null,
+    profilePicture varchar(100) not null,
+    criticNumber int not null,
+    isModo bool not null,
+    isAdmin bool not null,
+    isValid bool not null
+  );
 
-drop table if exists serie;
-create table serie(
-  idSerie int not null auto_increment primary key,
-  titreSerie varchar(50) not null,
-  descriptionSerie text not null,
-  posterSerie varchar(100)
-);
+  drop table if exists serie;
+  create table serie(
+    idSerie int not null auto_increment primary key,
+    title varchar(100) not null,
+    description text not null,
+    poster varchar(100)
+  );
 
-drop table if exists acteur;
-create table acteur(
-  idActeur int not null auto_increment primary key,
-  nomActeur varchar(25) not null,
-  prenomActeur varchar(25) not null
-);
+  drop table if exists actor;
+  create table actor(
+    idActor int not null auto_increment primary key,
+    lastName varchar(25) not null,
+    firstName varchar(25) not null
+  );
 
-drop table if exists genre;
-create table genre(
-  idGenre int not null auto_increment primary key,
-  nomGenre varchar(20)
-);
+  drop table if exists type;
+  create table type(
+    idType int not null auto_increment primary key,
+    name varchar(25)
+  );
 
-drop table if exists critique;
-create table critique(
-  idCritique int not null auto_increment primary key,
-  note float not null,
-  critique text not null,
-  boolModerationOk bool not null,
-  idUtilisateur int not null,
-  idSerie int not null,
-  constraint LiaisonCritiqueUtilisateur foreign key(idUtilisateur) references utilisateur(idUtilisateur),
-  constraint LiaisonCritiqueSerie foreign key(idSerie) references serie(idSerie),
-  constraint NoteCompriseEntreZeroEtDix check (note >= 0 and note <= 10)
-);
+  drop table if exists critic;
+  create table critic(
+    idCritic int not null auto_increment primary key,
+    score float not null,
+    content text not null,
+    likeNumber int not null,
+    dislikeNumber int not null,
+    isValid bool not null,
+    idUser int not null,
+    idSerie int not null,
+    constraint LiaisonCriticUser foreign key(idUser) references user(idUser),
+    constraint LiaisonCriticSerie foreign key(idSerie) references serie(idSerie),
+    constraint ScoreBetweenZeroAndTen check (score >= 0 and score <= 10)
+  );
 
-drop table if exists likeCritique;
-create table likeCritique(
-  idLikeCritique int not null auto_increment primary key,
-  compteurAime int not null,
-  compteurAimePas int not null,
-  ratioAime_AimePas float,
-  idUtilisateur int not null,
-  idCritique int not null,
-  constraint LiaisonLikeCritiqueOnCritique foreign key(idCritique) references critique(idCritique),
-  constraint LiaisonLikeCritiqueOnUtilisateur foreign key(idUtilisateur) references utilisateur(idUtilisateur)
-);
+  drop table if exists favoris;
+  create table favoris(
+    idFavoris int not null auto_increment primary key,
+    idSerie int not null,
+    idUser int not null,
+    constraint LiaisonFavorisSerie foreign key(idSerie) references serie(idSerie),
+    constraint LiaisonFavorisUser foreign key(idUser) references user(idUser)
+  );
 
+  drop table if exists serieType;
+  create table serieType(
+    idSerieType int not null auto_increment primary key,
+    idSerie int not null,
+    idType int not null,
+    constraint LiaisonSerieTypeOnSerie foreign key(idSerie) references serie(idSerie),
+    constraint LiaisonSerieTypeOnType foreign key(idType) references type(idType)
+  );
 
+  drop table if exists serieActor;
+  create table serieActor(
+    idSerieActor int not null auto_increment primary key,
+    idSerie int not null,
+    idActor int not null,
+    constraint LiaisonSerieActorOnSerie foreign key(idSerie) references serie(idSerie),
+    constraint LiaisonSerieActorOnActor foreign key(idActor) references actor(idActor)
+  );
 
-drop table if exists favoris;
-create table favoris(
-  idFavoris int not null auto_increment primary key,
-  idSerie int not null,
-  idUtilisateur int not null,
-  constraint LiaisonFavorisSerie foreign key(idSerie) references serie(idSerie),
-  constraint LiaisonFavorisUtilisateur foreign key(idUtilisateur) references utilisateur(idUtilisateur)
-);
+  drop table if exists episode;
+  create table episode(
+    idEpisode int not null auto_increment primary key,
+    title varchar(50),
+    desription text not null,
+    episodeNumber varchar(15) not null,
+    idSerie int not null,
+    constraint LiaisonEpisodeSerie foreign key(idSerie) references serie(idSerie)
+  );
 
-drop table if exists liaison_serie_genre;
-create table liaison_serie_genre(
-  idLiaison_serie_genre int not null auto_increment primary key,
-  idSerie int not null,
-  idGenre int not null,
-  constraint LiaisonSerieGenreOnSerie foreign key(idSerie) references serie(idSerie),
-  constraint LiaisonSerieGenreOnGenre foreign key(idGenre) references genre(idGenre)
-);
+  drop table if exists serieTemp;
+  create table serieTemp(
+    idSerieTemp int not null auto_increment primary key,
+    title varchar(50) not null,
+    description text not null,
+    poster varchar(100) not null,
+    idSerie int not null,
+    constraint LiaisonSerieTempOnSerie foreign key(idSerie) references serie(idSerie)
+  );
 
-drop table if exists liaison_serie_acteur;
-create table liaison_serie_acteur(
-  idLiaison_serie_acteur int not null auto_increment primary key,
-  idSerie int not null,
-  idActeur int not null,
-  constraint LiaisonSerieActeurOnSerie foreign key(idSerie) references serie(idSerie),
-  constraint LiaisonSerieActeurOnActeur foreign key(idActeur) references acteur(idActeur)
-);
+  drop table if exists serieTypeTemp;
+  create table serieTypeTemp(
+    idSerieTypeTemp int not null auto_increment primary key,
+    idType int not null,
+    idSerieTemp int not null,
+    constraint LiaisonSerieTypeTempOnType foreign key(idType) references type(idType),
+    constraint LiaisonSerieTypeTempOnSerieTemp foreign key(idSerieTemp) references serieTemp(idSerieTemp)
+  );
 
-drop table if exists saisons;
-create table saisons(
-  idSaison int auto_increment not null primary key,
-  numeroSaison int not null,
-  nombrEpisode int not null,
-  idSerie int not null,
-  constraint LiaisonSaisonSerie foreign key(idSerie) references serie(idSerie)
-);
-
-drop table if exists episode;
-create table episode(
-  idEpisode int not null auto_increment primary key,
-  titreEpisode varchar(50),
-  numeroEpisode varchar(15) not null,
-  idSaison int not null,
-  constraint LiaisonEpisodeSaison foreign key(idSaison) references saisons(idSaison)
-);
-
-drop table if exists ajout_modification_serie;
-create table ajout_modification_serie(
-  idAjoutModificationSerie int not null auto_increment primary key,
-  titreModifier varchar(50) not null,
-  descriptionModifier text not null,
-  posterModifier varchar(100) not null,
-  idSerie int not null,
-  constraint LiaisonAjoutModificationSerieOnSerie foreign key(idSerie) references serie(idSerie)
-);
+  drop table if exists serieActorTemp;
+  create table serieActorTemp(
+    idSerieActorTemp int not null auto_increment primary key,
+    idSerieTemp int not null,
+    idActor int not null,
+    constraint LiaisonSerieActorTempOnActor foreign key(idActor) references actor(idActor),
+    constraint LiaisonSerieActorTempOnSerieTemp foreign key(idSerieTemp) references serieTemp(idSerieTemp)
+  );
