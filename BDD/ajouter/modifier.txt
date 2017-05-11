@@ -1,3 +1,5 @@
 Recherche de série par épisode ? 
 	-nombre d'épisode
 	-un épisode précis
+
+Liaison entre serieTemp et user afin d'avoir l'id de l'user qui a fait la demande de modification

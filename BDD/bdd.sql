@@ -100,6 +100,8 @@ use bddV2;
     description text not null,
     poster varchar(100) not null,
     idSerie int not null,
+    idUser int not null,
+    constraint LiaisonSerieTempOnUser foreign key(idUser) references user(idUser),
     constraint LiaisonSerieTempOnSerie foreign key(idSerie) references serie(idSerie)
   );
 
