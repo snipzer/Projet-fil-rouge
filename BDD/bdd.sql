@@ -22,15 +22,19 @@ use bddV2;
   create table serie(
     idSerie int not null auto_increment primary key,
     title varchar(100) not null,
-    description text not null,
-    poster varchar(100)
+    description text,
+    poster varchar(100),
+    airsDayOfWeek varchar(25),
+    airsTime varchar(25),
+    isValid boolean not null
   );
 
   drop table if exists actor;
   create table actor(
     idActor int not null auto_increment primary key,
     lastName varchar(25) not null,
-    firstName varchar(25) not null
+    firstName varchar(25) not null,
+    picture varchar(100)
   );
 
   drop table if exists type;
@@ -56,6 +60,16 @@ use bddV2;
     constraint ScoreBetweenZeroAndTen check (score >= 0 and score <= 10)
   );
 
+  drop table if exists criticNotation;
+  create table criticNotation(
+    idCriticNotation int not null auto_increment primary key,
+    idCritic int not null,
+    idUser int not null,
+    isLike boolean not null,
+    constraint LiaisonCriticToCriticNotation foreign key(idCritic) references critic(idCritic),
+    constraint LiaisonUserToCriticNotation foreign key (idUser) references user(idUser)
+  );
+
   drop table if exists favoris;
   create table favoris(
     idFavoris int not null auto_increment primary key,
@@ -70,6 +84,9 @@ use bddV2;
     idSerieType int not null auto_increment primary key,
     idSerie int not null,
     idType int not null,
+    creationDate date not null,
+    modificationDate date not null,
+    isValid boolean not null,
     constraint LiaisonSerieTypeOnSerie foreign key(idSerie) references serie(idSerie),
     constraint LiaisonSerieTypeOnType foreign key(idType) references type(idType)
   );
@@ -79,6 +96,9 @@ use bddV2;
     idSerieActor int not null auto_increment primary key,
     idSerie int not null,
     idActor int not null,
+    role varchar(50),
+    creationDate date not null,
+    modificationDate date not null,
     constraint LiaisonSerieActorOnSerie foreign key(idSerie) references serie(idSerie),
     constraint LiaisonSerieActorOnActor foreign key(idActor) references actor(idActor)
   );
@@ -91,34 +111,4 @@ use bddV2;
     episodeNumber varchar(15) not null,
     idSerie int not null,
     constraint LiaisonEpisodeSerie foreign key(idSerie) references serie(idSerie)
-  );
-
-  drop table if exists serieTemp;
-  create table serieTemp(
-    idSerieTemp int not null auto_increment primary key,
-    title varchar(50) not null,
-    description text not null,
-    poster varchar(100) not null,
-    idSerie int not null,
-    idUser int not null,
-    constraint LiaisonSerieTempOnUser foreign key(idUser) references user(idUser),
-    constraint LiaisonSerieTempOnSerie foreign key(idSerie) references serie(idSerie)
-  );
-
-  drop table if exists serieTypeTemp;
-  create table serieTypeTemp(
-    idSerieTypeTemp int not null auto_increment primary key,
-    idType int not null,
-    idSerieTemp int not null,
-    constraint LiaisonSerieTypeTempOnType foreign key(idType) references type(idType),
-    constraint LiaisonSerieTypeTempOnSerieTemp foreign key(idSerieTemp) references serieTemp(idSerieTemp)
-  );
-
-  drop table if exists serieActorTemp;
-  create table serieActorTemp(
-    idSerieActorTemp int not null auto_increment primary key,
-    idSerieTemp int not null,
-    idActor int not null,
-    constraint LiaisonSerieActorTempOnActor foreign key(idActor) references actor(idActor),
-    constraint LiaisonSerieActorTempOnSerieTemp foreign key(idSerieTemp) references serieTemp(idSerieTemp)
   );
