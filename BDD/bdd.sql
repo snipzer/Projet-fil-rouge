@@ -45,7 +45,7 @@ use bddV2;
   drop table if exists critic;
   create table critic(
     idCritic int not null auto_increment primary key,
-    score float not null,
+    note int not null,
     content text not null,
     likeNumber int not null,
     dislikeNumber int not null,
@@ -56,7 +56,7 @@ use bddV2;
     idSerie int not null,
     constraint LiaisonCriticUser foreign key(idUser) references user(idUser),
     constraint LiaisonCriticSerie foreign key(idSerie) references serie(idSerie),
-    constraint ScoreBetweenZeroAndTen check (score >= 0 and score <= 10)
+    constraint ScoreBetweenZeroAndTen check (note >= 0 and note <= 10)
   );
 
   drop table if exists criticNotation;
