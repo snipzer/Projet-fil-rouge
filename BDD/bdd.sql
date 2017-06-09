@@ -32,8 +32,7 @@ use bddV2;
   drop table if exists actor;
   create table actor(
     idActor int not null auto_increment primary key,
-    lastName varchar(25) not null,
-    firstName varchar(25) not null,
+    name varchar(50) not null,
     picture varchar(100)
   );
 
@@ -86,7 +85,6 @@ use bddV2;
     idType int not null,
     creationDate date not null,
     modificationDate date not null,
-    isValid boolean not null,
     constraint LiaisonSerieTypeOnSerie foreign key(idSerie) references serie(idSerie),
     constraint LiaisonSerieTypeOnType foreign key(idType) references type(idType)
   );
