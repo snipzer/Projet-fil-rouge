@@ -107,6 +107,7 @@ use bddV2;
     title varchar(50),
     desription text not null,
     episodeNumber varchar(15) not null,
+    seasonNumber varchar(15) not null,
     idSerie int not null,
     constraint LiaisonEpisodeSerie foreign key(idSerie) references serie(idSerie)
   );
